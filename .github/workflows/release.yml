@@ -1,0 +1,58 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Build Frontend
+      working-directory: ./frontend
+      run: |
+        npm install
+        npm run build
+        
+    - name: Build Backend
+      working-directory: ./backend
+      run: dotnet build --configuration Release
+      
+    - name: Get version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: backend/SmartPlaylist/bin/Release/netstandard2.0/SmartPlaylist.dll
+        name: Release ${{ steps.version.outputs.VERSION }}
+        body: |
+          SmartPlaylist Plugin v${{ steps.version.outputs.VERSION }}
+          
+          ## Installation
+          1. Download `SmartPlaylist.dll`
+          2. Copy to your Emby server's plugins folder
+          3. Restart Emby Server
+          
+          ## Changes
+          See commit history for details.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
