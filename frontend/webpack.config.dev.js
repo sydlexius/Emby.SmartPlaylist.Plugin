@@ -5,7 +5,7 @@ const { TypedCssModulesPlugin } = require('typed-css-modules-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MiniCssExtractPluginConfig = new MiniCssExtractPlugin({
-    filename: 'smartplaylist.2.5.1.4830.css',
+    filename: 'smartplaylist.2.5.2.4860.css',
     chunkFilename: '[local].css',
 });
 
@@ -22,21 +22,24 @@ module.exports = {
 
     devServer: {
         contentBase: outDir,
+        hot: true,
+        historyApiFallback: true,
     },
 
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.css'],
         alias: {
-            '~/*': path.resolve(__dirname, './src'),
-            '~/common': path.resolve(__dirname, './src/common'),
-            '~/app': path.resolve(__dirname, './src/app'),
-            '~/emby': path.resolve(__dirname, './src/emby'),
+            '~': path.resolve(__dirname, './src'),
         },
     },
 
     output: {
         path: outDir,
-        filename: 'smartplaylist.2.5.1.4830.js',
+        filename: 'smartplaylist.2.5.2.4861.js',
+        library: {
+            type: 'amd',
+            export: 'default',
+        },
     },
 
     plugins: [
@@ -46,10 +49,6 @@ module.exports = {
             globPattern: 'src/**/*.css',
         }),
     ],
-    devServer: {
-        hot: true,
-        historyApiFallback: true,
-    },
 
     module: {
         rules: [

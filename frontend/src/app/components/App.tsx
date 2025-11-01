@@ -19,6 +19,7 @@ import { Export } from './Export';
 import { Inline } from '~/common/components/Inline';
 import { Import } from './Import';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export type AppProps = {
     appId: string;

@@ -103,8 +103,40 @@ public static class Getter
         {
             if (_audioCodecs == null)
             {
-                _audioCodecs = CreateListValues(() => Plugin.Instance.LibraryManager.GetAudioCodecs(new InternalItemsQuery())
-                                    .Items.OrderBy(x => x).Select(x => ListValue.Create(x)).ToArray());
+                try
+                {
+                    // Try the new API first (4.9+)
+                    _audioCodecs = CreateListValues(() =>
+                    {
+                        var items = Plugin.Instance.LibraryManager.QueryItems(new InternalItemsQuery
+                        {
+                            MediaTypes = new[] { MediaBrowser.Model.Entities.MediaType.Audio, MediaBrowser.Model.Entities.MediaType.Video },
+                            Recursive = true
+                        }).Items;
+                        
+                        return items
+                            .SelectMany(x => x.GetMediaStreams().Where(s => s.Type == MediaBrowser.Model.Entities.MediaStreamType.Audio))
+                            .Select(s => s.Codec)
+                            .Where(c => !string.IsNullOrEmpty(c))
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .Select(x => ListValue.Create(x))
+                            .ToArray();
+                    });
+                }
+                catch
+                {
+                    // Fallback for older API (4.8.x)
+                    try
+                    {
+                        _audioCodecs = CreateListValues(() => Plugin.Instance.LibraryManager.GetAudioCodecs(new InternalItemsQuery())
+                                            .Items.OrderBy(x => x).Select(x => ListValue.Create(x)).ToArray());
+                    }
+                    catch
+                    {
+                        _audioCodecs = new ListValue[] { ListValue.Create("") };
+                    }
+                }
             }
             return _audioCodecs;
         }
@@ -116,8 +148,40 @@ public static class Getter
         {
             if (_audioLanguages == null)
             {
-                _audioLanguages = CreateListValues(() => Plugin.Instance.LibraryManager.GetStreamLanguages(new InternalItemsQuery(), MediaBrowser.Model.Entities.MediaStreamType.Audio)
-                                    .Items.OrderBy(x => x).Select(x => ListValue.Create(x)).ToArray());
+                try
+                {
+                    // Try the new API first (4.9+)
+                    _audioLanguages = CreateListValues(() =>
+                    {
+                        var items = Plugin.Instance.LibraryManager.QueryItems(new InternalItemsQuery
+                        {
+                            MediaTypes = new[] { MediaBrowser.Model.Entities.MediaType.Audio, MediaBrowser.Model.Entities.MediaType.Video },
+                            Recursive = true
+                        }).Items;
+                        
+                        return items
+                            .SelectMany(x => x.GetMediaStreams().Where(s => s.Type == MediaBrowser.Model.Entities.MediaStreamType.Audio))
+                            .Select(s => s.Language)
+                            .Where(l => !string.IsNullOrEmpty(l))
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .Select(x => ListValue.Create(x))
+                            .ToArray();
+                    });
+                }
+                catch
+                {
+                    // Fallback for older API (4.8.x)
+                    try
+                    {
+                        _audioLanguages = CreateListValues(() => Plugin.Instance.LibraryManager.GetStreamLanguages(new InternalItemsQuery(), MediaBrowser.Model.Entities.MediaStreamType.Audio)
+                                            .Items.OrderBy(x => x).Select(x => ListValue.Create(x)).ToArray());
+                    }
+                    catch
+                    {
+                        _audioLanguages = new ListValue[] { ListValue.Create("") };
+                    }
+                }
             }
             return _audioLanguages;
         }
@@ -129,8 +193,40 @@ public static class Getter
         {
             if (_subtitleLanguages == null)
             {
-                _subtitleLanguages = CreateListValues(() => Plugin.Instance.LibraryManager.GetStreamLanguages(new InternalItemsQuery(), MediaBrowser.Model.Entities.MediaStreamType.Subtitle)
-                    .Items.OrderBy(x => x).Select(x => ListValue.Create(x)).ToArray());
+                try
+                {
+                    // Try the new API first (4.9+)
+                    _subtitleLanguages = CreateListValues(() =>
+                    {
+                        var items = Plugin.Instance.LibraryManager.QueryItems(new InternalItemsQuery
+                        {
+                            MediaTypes = new[] { MediaBrowser.Model.Entities.MediaType.Video },
+                            Recursive = true
+                        }).Items;
+                        
+                        return items
+                            .SelectMany(x => x.GetMediaStreams().Where(s => s.Type == MediaBrowser.Model.Entities.MediaStreamType.Subtitle))
+                            .Select(s => s.Language)
+                            .Where(l => !string.IsNullOrEmpty(l))
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .Select(x => ListValue.Create(x))
+                            .ToArray();
+                    });
+                }
+                catch
+                {
+                    // Fallback for older API (4.8.x)
+                    try
+                    {
+                        _subtitleLanguages = CreateListValues(() => Plugin.Instance.LibraryManager.GetStreamLanguages(new InternalItemsQuery(), MediaBrowser.Model.Entities.MediaStreamType.Subtitle)
+                            .Items.OrderBy(x => x).Select(x => ListValue.Create(x)).ToArray());
+                    }
+                    catch
+                    {
+                        _subtitleLanguages = new ListValue[] { ListValue.Create("") };
+                    }
+                }
             }
             return _subtitleLanguages;
         }
@@ -142,8 +238,40 @@ public static class Getter
         {
             if (_videoCodecs == null)
             {
-                _videoCodecs = CreateListValues(() => Plugin.Instance.LibraryManager.GetVideoCodecs(new InternalItemsQuery())
-                                                        .Items.OrderBy(x => x).Select(x => ListValue.Create(x)).ToArray());
+                try
+                {
+                    // Try the new API first (4.9+)
+                    _videoCodecs = CreateListValues(() =>
+                    {
+                        var items = Plugin.Instance.LibraryManager.QueryItems(new InternalItemsQuery
+                        {
+                            MediaTypes = new[] { MediaBrowser.Model.Entities.MediaType.Video },
+                            Recursive = true
+                        }).Items;
+                        
+                        return items
+                            .SelectMany(x => x.GetMediaStreams().Where(s => s.Type == MediaBrowser.Model.Entities.MediaStreamType.Video))
+                            .Select(s => s.Codec)
+                            .Where(c => !string.IsNullOrEmpty(c))
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .Select(x => ListValue.Create(x))
+                            .ToArray();
+                    });
+                }
+                catch
+                {
+                    // Fallback for older API (4.8.x)
+                    try
+                    {
+                        _videoCodecs = CreateListValues(() => Plugin.Instance.LibraryManager.GetVideoCodecs(new InternalItemsQuery())
+                                                                .Items.OrderBy(x => x).Select(x => ListValue.Create(x)).ToArray());
+                    }
+                    catch
+                    {
+                        _videoCodecs = new ListValue[] { ListValue.Create("") };
+                    }
+                }
             }
             return _videoCodecs;
         }

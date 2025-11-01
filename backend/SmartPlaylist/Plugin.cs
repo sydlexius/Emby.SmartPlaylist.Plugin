@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -111,16 +111,16 @@ namespace SmartPlaylist
             {
                 new PluginPageInfo
                 {
-                    Name = "smartplaylist.2.5.1.4850.html",
-                    EmbeddedResourcePath = GetType().Namespace + ".Configuration.smartplaylist.2.5.1.4850.html",
+                    Name = "smartplaylist.2.5.2.4862.html",
+                    EmbeddedResourcePath = GetType().Namespace + ".Configuration.smartplaylist.2.5.2.4862.html",
                     EnableInMainMenu = true,
                     MenuIcon = "subscriptions",
                     IsMainConfigPage = true
                 },
                 new PluginPageInfo
                 {
-                    Name = "smartplaylist.2.5.1.4850.js",
-                    EmbeddedResourcePath = GetType().Namespace + ".Configuration.smartplaylist.2.5.1.4850.js"
+                    Name = "smartplaylist.2.5.2.4862.js",
+                    EmbeddedResourcePath = GetType().Namespace + ".Configuration.smartplaylist.2.5.2.4862.js"
                 }
             };
         }

@@ -2,3 +2,17 @@ pack
 node_modules/
 *.lock
 .vscode/
+
+# Emby server logs
+embyserver*.txt
+
+# Build outputs
+backend/SmartPlaylist/bin/
+backend/SmartPlaylist/obj/
+backend/SmartPlaylist/Configuration/*.js
+backend/SmartPlaylist/Configuration/*.css
+
+# IDE files
+.vs/
+*.user
+*.suo

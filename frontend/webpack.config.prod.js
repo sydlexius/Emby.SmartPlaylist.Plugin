@@ -8,7 +8,7 @@ const { TypedCssModulesPlugin } = require('typed-css-modules-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MiniCssExtractPluginConfig = new MiniCssExtractPlugin({
-    filename: 'smartplaylist.2.5.1.4850.css',
+    filename: 'smartplaylist.2.5.2.4862.css',
 });
 const outDir = path.join(__dirname, '../backend/SmartPlaylist/Configuration');
 
@@ -40,31 +40,25 @@ module.exports = {
     entry: ['./src/index'],
 
     optimization: {
-        minimizer: [
-            new TerserJSPlugin({
-                parallel: true,
-                parallel: 4,
-                extractComments: false,
-                terserOptions: { output: { comments: false } },
-            }),
-            new OptimizeCSSAssetsPlugin({}),
-        ],
+        minimize: true,
+        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
         splitChunks: false,
     },
 
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.css'],
         alias: {
-            '~/*': path.resolve(__dirname, './src'),
-            '~/common': path.resolve(__dirname, './src/common'),
-            '~/app': path.resolve(__dirname, './src/app'),
-            '~/emby': path.resolve(__dirname, './src/emby'),
+            '~': path.resolve(__dirname, './src'),
         },
     },
 
     output: {
         path: outDir,
-        filename: 'smartplaylist.2.5.1.4850.js',
+        filename: 'smartplaylist.2.5.2.4862.js',
+        library: {
+            type: 'amd',
+            export: 'default',
+        },
     },
 
     module: {

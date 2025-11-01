@@ -1,3 +1,2 @@
-import { App } from '~/app/components/App';
-
-export default App;
+export { App } from './components/App';
+export { App as default } from './components/App';

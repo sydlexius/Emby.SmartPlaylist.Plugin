@@ -5,7 +5,9 @@
     "scripts": {
         "start": "webpack-dev-server --config webpack.config.dev.js --hot --open",
         "build": "webpack --config webpack.config.prod.js --mode production",
-        "debug": "webpack --config webpack.config.dev.js --mode development"
+        "debug": "webpack --config webpack.config.dev.js --mode development",
+        "lint:html": "htmlhint \"../backend/SmartPlaylist/Configuration/*.html\"",
+        "lint:js": "tslint -c tslint.json 'src/**/*.{ts,tsx}'"
     },
     "license": "MIT",
     "dependencies": {
@@ -41,6 +43,7 @@
         "css-loader": "^6.6.0",
         "css-minimizer-webpack-plugin": "^3.4.1",
         "html-webpack-plugin": "^5.5.0",
+        "htmlhint": "^1.7.1",
         "mini-css-extract-plugin": "^2.5.3",
         "prettier": "^2.5.1",
         "resolve-cwd": "^3.0.0",
