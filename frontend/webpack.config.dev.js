@@ -5,7 +5,7 @@ const { TypedCssModulesPlugin } = require('typed-css-modules-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MiniCssExtractPluginConfig = new MiniCssExtractPlugin({
-    filename: 'smartplaylist.2.5.2.4860.css',
+    filename: 'smartplaylist.2.5.2.4862.css',
     chunkFilename: '[local].css',
 });
 
@@ -35,7 +35,7 @@ module.exports = {
 
     output: {
         path: outDir,
-        filename: 'smartplaylist.2.5.2.4861.js',
+        filename: 'smartplaylist.2.5.2.4862.js',
         library: {
             type: 'amd',
             export: 'default',

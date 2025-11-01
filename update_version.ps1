@@ -45,6 +45,32 @@ function Update-WebpackConfig($oldVersion, $newVersion) {
     Write-Host "✓ Updated webpack.config.prod.js to version $newVersion" -ForegroundColor Green
 }
 
+function Update-WebpackDevConfig($oldVersion, $newVersion) {
+    $webpackPath = ".\frontend\webpack.config.dev.js"
+    $content = Get-Content $webpackPath -Raw
+    $content = $content -replace "smartplaylist\.$oldVersion", "smartplaylist.$newVersion"
+    Set-Content $webpackPath $content -NoNewline
+    Write-Host "✓ Updated webpack.config.dev.js to version $newVersion" -ForegroundColor Green
+}
+
+function Update-AppDataTs($oldVersion, $newVersion) {
+    $appDataPath = ".\frontend\src\emby\app.data.ts"
+    $content = Get-Content $appDataPath -Raw
+    $content = $content -replace "export const version = `"$oldVersion`"", "export const version = `"$newVersion`""
+    Set-Content $appDataPath $content -NoNewline
+    Write-Host "✓ Updated app.data.ts to version $newVersion" -ForegroundColor Green
+}
+
+function Update-PublishSh($oldVersion, $newVersion) {
+    $publishPath = ".\publish.sh"
+    if (Test-Path $publishPath) {
+        $content = Get-Content $publishPath -Raw
+        $content = $content -replace "version=$oldVersion", "version=$newVersion"
+        Set-Content $publishPath $content -NoNewline
+        Write-Host "✓ Updated publish.sh to version $newVersion" -ForegroundColor Green
+    }
+}
+
 function Rename-HtmlFile($oldVersion, $newVersion) {
     $configDir = ".\backend\SmartPlaylist\Configuration"
     $oldPath = Join-Path $configDir "smartplaylist.$oldVersion.html"
@@ -54,11 +80,18 @@ function Rename-HtmlFile($oldVersion, $newVersion) {
         # Update version reference inside the HTML file before renaming
         $content = Get-Content $oldPath -Raw
         $content = $content -replace "smartplaylist\.$oldVersion\.js", "smartplaylist.$newVersion.js"
-        Set-Content $oldPath $content -NoNewline
         
-        # Rename the file
-        Rename-Item $oldPath $newPath -Force
-        Write-Host "✓ Renamed HTML file from $oldVersion to $newVersion" -ForegroundColor Green
+        # Rename the file only if versions are different
+        if ($oldVersion -ne $newVersion) {
+            Set-Content $newPath $content -NoNewline
+            if (Test-Path $oldPath) {
+                Remove-Item $oldPath -Force
+            }
+            Write-Host "✓ Renamed HTML file from $oldVersion to $newVersion" -ForegroundColor Green
+        } else {
+            Set-Content $oldPath $content -NoNewline
+            Write-Host "✓ Updated HTML file version references" -ForegroundColor Green
+        }
     } else {
         Write-Host "⚠ HTML file not found: $oldPath" -ForegroundColor Yellow
     }
@@ -100,6 +133,9 @@ function Update-AllVersions($oldVersion, $newVersion) {
     Update-CsprojVersion $newVersion
     Update-PluginCs $oldVersion $newVersion
     Update-WebpackConfig $oldVersion $newVersion
+    Update-WebpackDevConfig $oldVersion $newVersion
+    Update-AppDataTs $oldVersion $newVersion
+    Update-PublishSh $oldVersion $newVersion
     Rename-HtmlFile $oldVersion $newVersion
     
     # Clean up old version files
