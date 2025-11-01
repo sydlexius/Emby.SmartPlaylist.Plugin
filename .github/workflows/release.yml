@@ -22,16 +22,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
+    
+    - name: Install yarn
+      run: npm install -g yarn
         
-    - name: Build Frontend
-      working-directory: ./frontend
-      run: |
-        npm install
-        npm run build
-        
-    - name: Build Backend
-      working-directory: ./backend
-      run: dotnet build --configuration Release
+    - name: Build Plugin
+      run: chmod +x build.sh && ./build.sh
       
     - name: Get version from tag
       id: version
